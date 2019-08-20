@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Computing Layer</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <style>
+        #data td{
+            width: 65px;
+        }
+        #data td span{
+            background-color: lightblue;
+            cursor: pointer;
+        }
+        #data td span:hover{
+            background-color: pink;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Graph Data</h2>
+    <hr>
+    <table id='data'>
+        <td align='center'><span>graph0</span></td>
+        <td align='center'><span>graph1</span></td>
+        <td align='center'><span>graph2</span></td>
+        <td align='center'><span>graph3</span></td>
+    </table>
+    <h2>Algorithms</h2>
+    <hr>
+    <button onclick="CommunityDetect()">CommunityDetection</button><br>
+    <button onclick="PageRank()">PageRank</button><br>
+    <label for="PRByNode">Node:</label>&nbsp;
+    <input type="text" name="PRByNode" id="PRByNode">&nbsp;
+    <button onclick="PageRankByNode()">PageRankByNode</button><br>
+    <!-- <a href="/PageRank">PageRank</a> -->
+
+    <form action="ShortestPath" method="POST">
+        <label for="source">Source:</label>
+        <input type="text" name="source" id="source">
+        <br>
+        <label for="target">Target:</label>
+        <input type="text" name="target" id="target">
+        <br>
+        <input type="button" value="submit" onclick="ShortestPath()">
+    </form>
+    <br>
+    <h2>Calculation</h2>
+    <hr>
+    <button onclick="degree()">Calculation Degree</button><br>
+    <h2>Result</h2>
+    <hr>
+    <div id='result'></div>
+    <script>
+        $(() => {
+            $('#data span').click(function(e){
+                // console.log(e.target)
+                // 箭头函数不绑定this
+                $.ajax({
+                    url: 'get_data',
+                    type: "GET",
+                    data: {
+                        dataName: $(this).text()
+                    },
+                    success: (result) => {
+                        $('#result').text(JSON.stringify(result))
+                    }
+                })
+            })
+        });
+        function CommunityDetect() {
+            $.ajax({
+                url: 'graph_community_detection',
+                type: "GET",
+                success: (result) => {
+                    $('#result').text(JSON.stringify(result))
+                }
+            })
+        }
+
+        function PageRank() {
+            $.ajax({
+                url: 'graph_page_rank',
+                type: "GET",
+                success: (result) => {
+                    $('#result').text(JSON.stringify(result))
+                }
+            })
+        }
+
+        function PageRankByNode() {
+            $.ajax({
+                url: 'graph_page_rank_node',
+                type: "GET",
+                data: {
+                    node: $('#PRByNode').val()
+                },
+                success: (result) => {
+                    $('#result').text(result)
+                }
+            })
+        }
+
+        function ShortestPath() {
+            $.ajax({
+                url: 'graph_shortest_path',
+                type: "GET",
+                data: {
+                    source: $('#source').val(),
+                    target: $('#target').val()
+                },
+                success: (result) => {
+                    $('#result').text(result)
+                }
+            })
+        }
+
+        function degree() {
+            $.ajax({
+                url: 'calculate_degree',
+                type: "GET",
+                success: (result) => {
+                    $('#result').text(JSON.stringify(result))
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
