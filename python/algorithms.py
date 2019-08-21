@@ -39,9 +39,6 @@ str_data = sys.argv[2]
 with open(str_data,"r") as f:
     json_data = json.load(f)
 
-# for i in json_data['links']:
-#     i['weight'] = int(i['weight'])
-
 G = nx.readwrite.json_graph.node_link_graph(json_data)
 
 try:
