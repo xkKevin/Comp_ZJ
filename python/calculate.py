@@ -27,7 +27,7 @@ try:
     if calculate == 'DG':
         degree(G)
     else:
-        print("There is no such calculate!")
+        print("There is no such calculation!")
 except Exception as e:
     print('Exception:',e)
 else:

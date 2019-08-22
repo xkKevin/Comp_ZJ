@@ -12,6 +12,8 @@
 
 `npm i`
 
+`pip install -r requirements.txt`
+
 ## Start Project
 
 `nodemon app.js`
@@ -20,7 +22,7 @@
 
 ### Index UI
 
-localhost:3000 or 127.0.0.1:3000   (Ugly but useful)
+localhost:80 or 127.0.0.1:80 (Ugly but useful)
 
 ![index UI](./data/indexUI.jpg)
 
@@ -34,8 +36,6 @@ localhost:3000 or 127.0.0.1:3000   (Ugly but useful)
 |   graph_page_rank_node    | GET / POST |      node      | 0.002  // 只输出该node的PageRank值                           |
 |    graph_shortest_path    | GET / POST | source, target | [[‘1’,’3’,’2’],[‘1’,’5’,’2’]]  //从source到target所有最短路径 |
 |     calculate_degree      |    GET     |       -        | {1:3,2:5} //返回每个节点的度                                 |
-
-**注：在请求 CommunityDetection 或 PageRank 的时候，首先会判断之前是否计算过（即判断节点是否存在community 或 pageRank 属性），是 则直接返回原先计算的结果，否 则在计算后将相应属性信息保存至图中，并发送给数据库保存计算结果。**
 
 ## Example
 

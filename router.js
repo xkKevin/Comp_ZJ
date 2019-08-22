@@ -1,5 +1,5 @@
 const express = require('express')
-var request = require('request')
+// var request = require('request')
 const fs = require('fs')
 var exec = require("child_process").exec
 
@@ -55,15 +55,6 @@ router.get('/graph_community_detection', function(req, res) {
 })
 
 router.get('/graph_page_rank', function(req, res) {
-    //res.send(JSON.stringify(req.body))
-    /*
-    request('http://127.0.0.1:3000/pageRank', function(error, response, body) {
-        //console.log('error:', error); // Print the error if one occurred
-        //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        //console.log('body:', body); // Print the HTML for the Google homepage.
-        res.send(body)
-    })
-    */
     filename = './python/algorithms.py'
     exec(`python ${filename} PR ${graph_file}`, function(err, stdout, stderr) {
         if (err) {

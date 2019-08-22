@@ -9,7 +9,8 @@ def communityDetect(G):
     result = json.dumps(communities)
     print(result)
     # 给图添加属性
-    nx.set_node_attributes(G,communities,'community')
+    # nx.set_node_attributes(G,communities,'community')
+
 
 def pageRank(G,node=None):
     # print("pageRank:\n", G.nodes())
@@ -22,20 +23,25 @@ def pageRank(G,node=None):
         jsonStr = json.dumps(pr)
         print(jsonStr)
     # 给图添加属性，并保存计算的结果
-    nx.set_node_attributes(G,pr,'pageRank')
+    # nx.set_node_attributes(G,pr,'pageRank')
+
 
 def shortestPath(G, start, end):
-    # print("shortestPath:", start,end,"\n", G.node['I5'])
+    '''
     sp = nx.all_shortest_paths(G, source=start, target=end)
     spl = [spi for spi in sp]
     jsonStr = json.dumps(spl)
     print(jsonStr)  
+    # print(len(spl),len(spl[0]))
+    '''
+    sp = nx.shortest_path(G, source=start, target=end)
+    print(sp)
+
 
 # if __name__ == "__main__":
 algorithm = sys.argv[1]
 str_data = sys.argv[2]
-# print(sys.argv,type(str_data))
-# json_data = json.loads(str_data) 
+
 with open(str_data,"r") as f:
     json_data = json.load(f)
 
