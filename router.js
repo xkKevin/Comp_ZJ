@@ -15,7 +15,7 @@ router.post('/get_data', function(req, res) {
     graph_file = './data/' + req.body.dataName + '.json'
     fs.readFile(graph_file,function(err,data){
         if (err) {
-            res.send('No such data:' + err);
+            res.send('No such data:' + err)
         }
         res.json(JSON.parse(data.toString()))
     })
@@ -26,7 +26,7 @@ router.get('/get_data', function(req, res) {
     graph_file = './data/' + req.query.dataName + '.json'
     fs.readFile(graph_file,function(err,data){
         if (err) {
-            res.send('No such data:' + err);
+            res.send('No such data:' + err)
         }
         res.json(JSON.parse(data.toString()))
     })
@@ -46,10 +46,10 @@ router.get('/graph_community_detection', function(req, res) {
     filename = './python/algorithms.py'
     exec(`python ${filename} CD ${graph_file}`, function(err, stdout, stderr) {
         if (err) {
-            res.send('stderr:' + err);
+            res.send('stderr:' + err)
         }
         if (stdout) {
-            res.json(JSON.parse(stdout));
+            res.json(JSON.parse(stdout))
         }
     })
 })
@@ -58,10 +58,10 @@ router.get('/graph_page_rank', function(req, res) {
     filename = './python/algorithms.py'
     exec(`python ${filename} PR ${graph_file}`, function(err, stdout, stderr) {
         if (err) {
-            res.send('stderr:' + err);
+            res.send('stderr:' + err)
         }
         if (stdout) {
-            res.json(JSON.parse(stdout));
+            res.json(JSON.parse(stdout))
         }
     })
 })
@@ -70,10 +70,10 @@ router.get('/graph_page_rank_node', function(req, res) {
     filename = './python/algorithms.py'
     exec(`python ${filename} PR ${graph_file} ${req.query.node}`, function(err, stdout, stderr) {
         if (err) {
-            res.send('stderr:' + err);
+            res.send('stderr:' + err)
         }
         if (stdout) {
-            res.json(stdout);
+            res.json(stdout)
         }
     })
 })
@@ -113,10 +113,11 @@ router.post('/graph_shortest_path', function(req, res) {
     exec(`python ${filename} SP ${graph_file} ${req.body.source} ${req.body.target}`,
         function(err, stdout, stderr) {
             if (err) {
-                res.send('stderr:' + err);
+                res.send('stderr:' + err)
             }
             if (stdout) {
-                res.send(stdout);
+                stdout = stdout.replace('[','').replace(']','').replace(/[\s']/g,'').split(',')
+                res.json(stdout)
             }
         })
 })
@@ -126,10 +127,11 @@ router.get('/graph_shortest_path', function(req, res) {
     exec(`python ${filename} SP ${graph_file} ${req.query.source} ${req.query.target}`,
         function(err, stdout, stderr) {
             if (err) {
-                res.send('stderr:' + err);
+                res.send('stderr:' + err)
             }
             if (stdout) {
-                res.send(stdout);
+                stdout = stdout.replace('[','').replace(']','').replace(/[\s']/g,'').split(',')
+                res.json(stdout)
             }
         })
 })
@@ -139,10 +141,10 @@ router.get('/calculate_degree', function(req, res) {
     exec(`python ${filename} DG ${graph_file}`,
     function(err, stdout, stderr) {
         if (err) {
-            res.send('stderr:' + err);
+            res.send('stderr:' + err)
         }
         if (stdout) {
-            res.json(JSON.parse(stdout));
+            res.json(JSON.parse(stdout))
         }
     })
 })

@@ -34,7 +34,7 @@ localhost:80 or 127.0.0.1:80 (Ugly but useful)
 | graph_community_detection |    GET     |       -        | {0:1,1:1}  //json, 反映每个节点属于哪个社团                  |
 |      graph_page_rank      |    GET     |       -        | [('0',0.02),('1',0.01)] //根据pr大小排序，输出每个节点的pr，返回数组 |
 |   graph_page_rank_node    | GET / POST |      node      | 0.002  // 只输出该node的PageRank值                           |
-|    graph_shortest_path    | GET / POST | source, target | [[‘1’,’3’,’2’],[‘1’,’5’,’2’]]  //从source到target所有最短路径 |
+|    graph_shortest_path    | GET / POST | source, target | [‘1’,’3’,’2’]  //从source到target的一条最短路径              |
 |     calculate_degree      |    GET     |       -        | {1:3,2:5} //返回每个节点的度                                 |
 
 ## Example
