@@ -34,20 +34,20 @@ def shortestPath(G, start, end):
 
 
 # if __name__ == "__main__":
-algorithm = sys.argv[1]
-str_data = sys.argv[2]
-
 try:
-    G = nx.readwrite.json_graph.node_link_graph(json.loads(str_data))
+    algorithm = sys.argv[1]
+
+    with open('./data/result.json',"r") as f:
+        json_data = json.load(f)
+
+    G = nx.readwrite.json_graph.node_link_graph(json_data)
+    
     if algorithm == 'CD':
         communityDetect(G)
     elif algorithm == 'PR':
-        if len(sys.argv) > 3:
-            pageRank(G,sys.argv[3])
-        else:
-            pageRank(G)
+        pageRank(G)
     elif algorithm == 'SP':
-        shortestPath(G, sys.argv[3], sys.argv[4])
+        shortestPath(G, sys.argv[2], sys.argv[3])
     else:
         print("There is no such algorithm!")
 except Exception as e:

@@ -8,18 +8,20 @@ def degree(G):
     d = {}
     for di in degree:
         d[di[0]]=di[1]
-    nx.set_node_attributes(G,d,'degree')
-    
     jsonStr = json.dumps(d)
     print(jsonStr)
+    # sys.stdout.flush()
 
 
 # if __name__ == "__main__":
-calculate = sys.argv[1]
-str_data = sys.argv[2]
-
 try:
-    G = nx.readwrite.json_graph.node_link_graph(json.loads(str_data))
+    calculate = sys.argv[1]
+
+    with open('./data/result.json',"r") as f:
+        json_data = json.load(f)
+
+    G = nx.readwrite.json_graph.node_link_graph(json_data)
+    
     if calculate == 'DG':
         degree(G)
     else:
@@ -27,9 +29,4 @@ try:
 except Exception as e:
     print('Exception:',e)
 else:
-    # 保存当前图的结果
-    # if calculate != 'SP':
-    #     json_G = nx.readwrite.json_graph.node_link_data(G)
-    #     with open("./data/result.json","w") as f:
-    #         json.dump(json_G,f)
     pass
