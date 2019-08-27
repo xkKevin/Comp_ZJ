@@ -107,7 +107,7 @@
         function ShortestPath() {
             $.ajax({
                 url: 'graph_shortest_path',
-                type: "GET",
+                type: "POST",
                 data: {
                     source: $('#source').val(),
                     target: $('#target').val()

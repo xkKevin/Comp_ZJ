@@ -18,12 +18,8 @@ def degree(G):
 calculate = sys.argv[1]
 str_data = sys.argv[2]
 
-with open(str_data,"r") as f:
-    json_data = json.load(f)
-
-G = nx.readwrite.json_graph.node_link_graph(json_data)
-
 try:
+    G = nx.readwrite.json_graph.node_link_graph(json.loads(str_data))
     if calculate == 'DG':
         degree(G)
     else:

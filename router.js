@@ -1,38 +1,15 @@
 const express = require('express')
 // var request = require('request')
 const fs = require('fs')
-var exec = require("child_process").exec
+var spawn = require("child_process").spawn
 
 const router = express.Router()
-var filename = './python/algorithms.py'
-var graph_file = './data/graph0.json'
 
 router.get('/', function(req, res) {
     res.render('index.html')
 })
 
-router.post('/get_data', function(req, res) {
-    graph_file = './data/' + req.body.dataName + '.json'
-    fs.readFile(graph_file,function(err,data){
-        if (err) {
-            res.send('No such data:' + err)
-        }
-        res.json(JSON.parse(data.toString()))
-    })
-    
-})
-
-router.get('/get_data', function(req, res) {
-    graph_file = './data/' + req.query.dataName + '.json'
-    fs.readFile(graph_file,function(err,data){
-        if (err) {
-            res.send('No such data:' + err)
-        }
-        res.json(JSON.parse(data.toString()))
-    })
-})
-
-router.get('/graph_community_detection', function(req, res) {
+router.post('/graph_community_detection', function(req, res) {
     //res.send(JSON.stringify(req.body))
     // request 默认是 get 请求
     /*
@@ -43,119 +20,86 @@ router.get('/graph_community_detection', function(req, res) {
         res.send(body)
     })
     */
-    filename = './python/algorithms.py'
-    exec(`python ${filename} CD ${graph_file}`, function(err, stdout, stderr) {
+    
+    // console.log(typeof(req.body.data))
+    // console.log(req.body.data)
+    // res.send(req.body.data)
+    /*
+    exec(`python ${filename} CD ${req.body.data}`, function(err, stdout, stderr) {
         if (err) {
             res.send('stderr:' + err)
         }
         if (stdout) {
-            res.json(JSON.parse(stdout))
+            res.send(stdout)
         }
     })
-})
-
-router.get('/graph_page_rank', function(req, res) {
-    filename = './python/algorithms.py'
-    exec(`python ${filename} PR ${graph_file}`, function(err, stdout, stderr) {
-        if (err) {
-            res.send('stderr:' + err)
-        }
-        if (stdout) {
-            res.json(JSON.parse(stdout))
-        }
+    */
+   if (typeof(req.body.data) === "object"){
+        req.body.data = JSON.stringify(req.body.data)
+    }
+    var process = spawn('python', ['./python/algorithms.py', 'CD', req.body.data])
+    process.stdout.on('data', (data) => {
+        // Do something with the data returned from python script
+        res.json(JSON.parse(data))
+        // res.send(data)
     })
+    process.stderr.on('data',(data) => {
+        res.send('stderr:' + data)
+    })
+    // process.on('exit', (code) => {
+    //     res.send('Child process exited with code ' + code)
+    // })
 })
 
-router.get('/graph_page_rank_node', function(req, res) {
-    filename = './python/algorithms.py'
-    exec(`python ${filename} PR ${graph_file} ${req.query.node}`, function(err, stdout, stderr) {
-        if (err) {
-            res.send('stderr:' + err)
-        }
-        if (stdout) {
-            res.json(stdout)
-        }
+router.post('/graph_page_rank', function(req, res) {
+    if (typeof(req.body.data) === "object"){
+        req.body.data = JSON.stringify(req.body.data)
+    }
+    var process = spawn('python', ['./python/algorithms.py', 'PR', req.body.data])
+    process.stdout.on('data', (data) => {
+        res.json(JSON.parse(data))
+    })
+    process.stderr.on('data',(data) => {
+        res.send('stderr:' + data)
     })
 })
 
 router.post('/graph_shortest_path', function(req, res) {
-    //res.send(JSON.stringify(req.body))
-    // console.log(JSON.stringify(req.body))
-    // console.log(req.body, req.body.source, req.body.target)
-    /*
-    var url = 'http://127.0.0.1:3000/shortestPath'
-    request.post({
-            url: url,
-            form: {
-                start: req.body.source,
-                end: req.body.target
-            }
-        }, function(error, response, body) {
-            res.send(body)
-        })
-        
-    request({
-        //url: 'http://127.0.0.1:3000/shortestPath',
-        method: "POST",
-        json: true,
-        body: {
-            start: 2,
-            end: 5
-        }
-    }, function(error, response, body) {
-        if (!error && response.statusCode == 200) {
-            res.send("200: " + body)
-        }
-        res.send(body)
+    // filename = './python/algorithms.py'
+    // exec(`python ${filename} SP ${graph_file} ${req.body.source} ${req.body.target}`,
+    //     function(err, stdout, stderr) {
+    //         if (err) {
+    //             res.send('stderr:' + err)
+    //         }
+    //         if (stdout) {
+    //             stdout = stdout.replace('[','').replace(']','').replace(/[\s']/g,'').split(',')
+    //             res.json(stdout)
+    //         }
+    //     })
+    if (typeof(req.body.data) === "object"){
+        req.body.data = JSON.stringify(req.body.data)
+    }
+    var process = spawn('python', ['./python/algorithms.py', 'SP', req.body.data, req.body.source, req.body.target])
+    process.stdout.on('data', (data) => {
+        res.json(JSON.parse(data))
     })
-    */
-    filename = './python/algorithms.py'
-    exec(`python ${filename} SP ${graph_file} ${req.body.source} ${req.body.target}`,
-        function(err, stdout, stderr) {
-            if (err) {
-                res.send('stderr:' + err)
-            }
-            if (stdout) {
-                stdout = stdout.replace('[','').replace(']','').replace(/[\s']/g,'').split(',')
-                res.json(stdout)
-            }
-        })
-})
-
-router.get('/graph_shortest_path', function(req, res) {
-    filename = './python/algorithms.py'
-    exec(`python ${filename} SP ${graph_file} ${req.query.source} ${req.query.target}`,
-        function(err, stdout, stderr) {
-            if (err) {
-                res.send('stderr:' + err)
-            }
-            if (stdout) {
-                stdout = stdout.replace('[','').replace(']','').replace(/[\s']/g,'').split(',')
-                res.json(stdout)
-            }
-        })
-})
-
-router.get('/calculate_degree', function(req, res) {
-    filename = './python/calculate.py'
-    exec(`python ${filename} DG ${graph_file}`,
-    function(err, stdout, stderr) {
-        if (err) {
-            res.send('stderr:' + err)
-        }
-        if (stdout) {
-            res.json(JSON.parse(stdout))
-        }
+    process.stderr.on('data',(data) => {
+        res.send('stderr:' + data)
     })
 })
 
+router.post('/calculate_degree', function(req, res) {
+    if (typeof(req.body.data) === "object"){
+        req.body.data = JSON.stringify(req.body.data)
+    }
+    var process = spawn('python', ['./python/calculate.py', 'DG', req.body.data])
 
-router.post('/test', function(req, res) {
-    //res.send(JSON.stringify(req.body))
-    console.log("test", req.body);
-    var start = parseFloat(req.body.start)
-    var end = parseFloat(req.body.end)
-    res.send((start + end).toString())
+    process.stdout.on('data', (data) => {
+        res.json(JSON.parse(data))
+    })
+    process.stderr.on('data',(data) => {
+        res.send('stderr:' + data)
+    })
 })
 
 module.exports = router

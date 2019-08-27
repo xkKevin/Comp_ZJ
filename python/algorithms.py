@@ -3,8 +3,8 @@ import community #this is from python-louvain
 import sys
 import json
 
+
 def communityDetect(G):
-    # print("communityDetect: \n", G.node['I5'])
     communities = community.best_partition(G)
     result = json.dumps(communities)
     print(result)
@@ -13,15 +13,10 @@ def communityDetect(G):
 
 
 def pageRank(G,node=None):
-    # print("pageRank:\n", G.nodes())
     pr=nx.pagerank(G)
-    if node:
-        print(pr[node])
-    else:
-        # pagerank = sorted(pr.items(), key=lambda item: item[1], reverse=True)
-        # jsonStr = json.dumps(pagerank)
-        jsonStr = json.dumps(pr)
-        print(jsonStr)
+    # pagerank = sorted(pr.items(), key=lambda item: item[1], reverse=True)
+    str_pr = json.dumps(pr)
+    print(str_pr)
     # 给图添加属性，并保存计算的结果
     # nx.set_node_attributes(G,pr,'pageRank')
 
@@ -35,19 +30,15 @@ def shortestPath(G, start, end):
     # print(len(spl),len(spl[0]))
     '''
     sp = nx.shortest_path(G, source=start, target=end)
-    print(sp)
+    print(json.dumps(sp))
 
 
 # if __name__ == "__main__":
 algorithm = sys.argv[1]
 str_data = sys.argv[2]
 
-with open(str_data,"r") as f:
-    json_data = json.load(f)
-
-G = nx.readwrite.json_graph.node_link_graph(json_data)
-
 try:
+    G = nx.readwrite.json_graph.node_link_graph(json.loads(str_data))
     if algorithm == 'CD':
         communityDetect(G)
     elif algorithm == 'PR':

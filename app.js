@@ -19,9 +19,10 @@ app.engine('html', require('express-art-template'))
     // 只要加入这个配置，则在 req 请求对象上会多出来一个属性：body
     // 也就是说你就可以直接通过 req.body 来获取表单 POST 请求体数据了
     // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
     // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '50mb', extended: true }))
+
 app.use('/python', express.static('./'))
 app.use(router)
 app.use(function(req, res) {
